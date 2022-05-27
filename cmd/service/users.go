@@ -1,27 +1,17 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"log"
 	"net/http"
 	"time"
 )
 
 const (
 	birthDateFormat = "2006-01-02"
-	database        = "test"
-	collection      = "username"
 )
 
-type User struct {
-	Username    string    `bson:"username" json:"username"`
-	DateOfBirth time.Time `bson:"dateOfBirth" json:"dateOfBirth"`
-}
-
-func putUsername(c *gin.Context) {
+func putUser(c *gin.Context) {
 	username := c.Param("username")
 	if username == "" {
 		c.JSON(http.StatusBadRequest, newErrorResp(fmt.Errorf("no username provided")))
@@ -40,36 +30,30 @@ func putUsername(c *gin.Context) {
 		return
 	}
 
-	collection := mCli.Database(database).Collection(collection)
-
-	_, err = collection.InsertOne(context.Background(), User{username, data})
+	err = conn.InsertUser(username, data)
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(http.StatusInternalServerError, newErrorResp(err))
+		return
 	}
 
 	c.Status(http.StatusNoContent)
 }
 
-func getUsername(c *gin.Context) {
+func getUser(c *gin.Context) {
 	username := c.Param("username")
 	if username == "" {
 		c.JSON(http.StatusBadRequest, newErrorResp(fmt.Errorf("no username provided")))
 		return
 	}
 
-	collection := mCli.Database(database).Collection(collection)
-
-	var result User
-	err := collection.FindOne(context.Background(), bson.D{{"username", username}}).Decode(&result)
+	user, err := conn.GetUser(username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, newErrorResp(err))
 		return
 	}
 
-	msg := createResponse(result)
-
 	c.JSON(http.StatusOK, &usernameResp{
-		Message: msg,
+		Message: createResponse(user),
 	})
 }
 

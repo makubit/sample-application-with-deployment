@@ -10,7 +10,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func NewMongoClient(uri string) *mongo.Client {
+type MongoConnection struct {
+	Cli        *mongo.Client
+	Database   string
+	Collection string
+}
+
+func NewMongoConnection(uri string) *MongoConnection {
 	clientOptions := options.Client().ApplyURI(uri)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -20,5 +26,9 @@ func NewMongoClient(uri string) *mongo.Client {
 		log.Fatal(err)
 	}
 
-	return client
+	return &MongoConnection{
+		Cli:        client,
+		Database:   "test",
+		Collection: "username",
+	}
 }

@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"makubit.com/sample-app/internal/db"
+)
 
 type usernameReq struct {
 	DateOfBirth string `json:"dateOfBirth" binding:"required"`
@@ -20,7 +23,7 @@ func newErrorResp(err error) *errorResp {
 	}
 }
 
-func createResponse(user User) string {
+func createResponse(user db.User) string {
 	var days int
 	if !isBirthdayToday(user.DateOfBirth) {
 		days = calculateBirthday(user.DateOfBirth)
