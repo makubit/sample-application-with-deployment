@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
 
@@ -23,7 +24,7 @@ func (conn *MongoConnection) GetUser(username string) (User, error) {
 	collection := conn.Cli.Database(conn.Database).Collection(conn.Collection)
 
 	var user User
-	err := collection.FindOne(context.Background(), bson.D{{"username", username}}).Decode(&user)
+	err := collection.FindOne(context.Background(), bson.D{primitive.E{Key: "username", Value: username}}).Decode(&user)
 	if err != nil {
 		return User{}, err
 	}
