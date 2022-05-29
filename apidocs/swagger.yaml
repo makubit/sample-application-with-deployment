@@ -1,0 +1,99 @@
+openapi: 3.0.1
+info:
+  title: Sample Service
+  description: Sample service is an simple service that calculates in how many days user has birthday.
+  contact:
+    name: Magda Kubit
+  version: '2.0'
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /hello/{username}:
+    get:
+      tags:
+        - User Operations
+      summary: Get instance of user with his birthday
+      description: Get instance of user from mongo database containing information about his birthday.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                message: "Hello, User! Your birthday is in 13 day(s)"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - User Operations
+      summary: Put instance of user with his birthday
+      description: Put instance of user to mongo database containing information about his birthday.
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: User parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: |-
+            - Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    UserRequest:
+      required:
+        - dateOfBirth
+      type: object
+      properties:
+        dateOfBirth:
+          type: string
+          format: date
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string

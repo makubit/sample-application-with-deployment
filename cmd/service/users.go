@@ -14,7 +14,7 @@ const (
 func putUser(c *gin.Context) {
 	username := c.Param("username")
 	if username == "" {
-		c.JSON(http.StatusBadRequest, newErrorResp(fmt.Errorf("no username provided")))
+		c.JSON(http.StatusNotFound, newErrorResp(fmt.Errorf("no username provided")))
 		return
 	}
 
@@ -42,7 +42,7 @@ func putUser(c *gin.Context) {
 func getUser(c *gin.Context) {
 	username := c.Param("username")
 	if username == "" {
-		c.JSON(http.StatusBadRequest, newErrorResp(fmt.Errorf("no username provided")))
+		c.JSON(http.StatusNotFound, newErrorResp(fmt.Errorf("no username provided")))
 		return
 	}
 
