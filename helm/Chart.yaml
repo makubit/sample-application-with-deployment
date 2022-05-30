@@ -1,0 +1,6 @@
+name: sample-application-with-deployment
+version: 0.1.0
+apiVersion: v2
+description: A Helm chart that serves simple-application-with-deployment service
+keywords:
+  - simple-application

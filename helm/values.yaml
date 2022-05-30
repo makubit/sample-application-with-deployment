@@ -1,0 +1,7 @@
+service:
+  name: simple-application-with-deployment
+  replicaCount: 3
+  image: makubit/simple-application:latest #TODO: move it to makefile
+  port: 8080
+  arguments: ['--uri', 'xyz']
+  dbUriKey: dbUriKey
