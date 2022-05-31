@@ -19,7 +19,11 @@ spec:
           image: {{ .Values.service.image }}
           ports:
             - containerPort: {{ .Values.service.port }}
-          args:
-            {{ range .Values.service.arguments }}
-            - {{ . }}
-            {{ end }}
+          volumeMounts:
+            - name: {{ .Values.service.secretName }}
+              mountPath: "/etc/mongodb/auth"
+      volumes:
+      - name: {{ .Values.service.secretName }}
+        secret:
+          secretName: {{ .Values.service.secretName }}
+          defaultMode: 0444
