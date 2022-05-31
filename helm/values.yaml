@@ -1,6 +1,6 @@
 service:
   name: simple-application-with-deployment
   replicaCount: 3
-  image: makubit/simple-application:latest #TODO: move it to makefile
+  image: ${img}
   port: 8080
   secretName: mongodb-uri
