@@ -1,16 +1,15 @@
 # Sample Application With Deployment
 
-Sample Application With Deployment is a test service tha returns information about user's birthday (how many days left to next birthday).  
-This application has designed deployment/system strategy that you can find [here](docs/system.md).
+Sample Application With Deployment is a test service tha returns information about user's birthday (how many days left to the next birthday).  
+This application has designed deployment and architecture which you can find [here](docs/system.md).
 
 To run application you will need:
  - [go](https://go.dev/) version 1.18
  - [helm](https://helm.sh/)
- - [terraform](https://www.terraform.io/)
 
 ## Important Note
-This repository does not include terraform deployment of atlas mongodb and AWS secret. I've created it beforehand and because of my illness (I'm still on the sick leave) I was not able to fully complete this task (what I planned to do).  
-What I was planning to do, but wasn't able, was to create terraform scripts for atlas mongodb and aws secret.  
+This repository does not include terraform deployment of atlas mongodb and AWS secret. I've created it beforehand.  
+In next steps I would create terraform scripts for atlas mongodb and aws secret, then catch outputs in Makefile and pass them to helm.  
 What is more, I was thinking about automating the whole stuff using Github Actions.  
 
 ### Development
@@ -20,18 +19,20 @@ You can build project with:
 ```
 make build
 ```
-or execute tests with:
-```
-make test
-```
-or examine go code using commands:
+Examine go code using commands:
 ```
 make fmt
 make vet
 ```
-or, finally, create docker container:
+Run local mongodb container and execute tests (unit and integration) with:
+```
+make mongo-docker-run 
+make test
+```
+Create and push docker container:
 ```
 make docker-build
+make docker-push
 ```
 To clean project from binaries and test files you can run:
 ```
@@ -45,7 +46,7 @@ For linting and building helm charts you can use:
 ```
 make helm-build
 ```
-This command copies helm charts and overwrites {img} parameter, which is defined in Makefile.  
+This command copies helm charts and overwrites ${img} parameter, which is defined in Makefile.  
 
 To deploy service to your local environment you can use (no need to run `helm-build` command before):
 ```
@@ -55,3 +56,6 @@ To delete helm deployment:
 ```
 make helm-delete
 ```
+
+I quite enjoyed this task :)  
+~Magda

@@ -25,10 +25,7 @@ type MongoConnection struct {
 }
 
 func NewMongoConnection() *MongoConnection {
-	uri, err := retrieveSecret()
-	if err != nil {
-		log.Fatal(err)
-	}
+	uri := retrieveUri()
 	clientOptions := options.Client().ApplyURI(uri)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -45,11 +42,10 @@ func NewMongoConnection() *MongoConnection {
 	}
 }
 
-func retrieveSecret() (string, error) {
+func retrieveUri() string {
 	uri, err := os.ReadFile(secretPath + secretName)
 	if err != nil {
-		return "", err
+		return "mongodb://localhost:27017"
 	}
-
-	return string(uri), nil
+	return string(uri)
 }

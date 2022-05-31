@@ -9,16 +9,24 @@ import (
 var conn *db.MongoConnection
 
 func main() {
-	conn = db.NewMongoConnection()
+	setupMongoDBConnection()
 
+	e := setupServer()
+	if err := e.Run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func setupServer() *gin.Engine {
 	e := gin.Default()
 	hello := e.Group("/hello")
 	{
 		hello.PUT("/:username", putUser)
 		hello.GET("/:username", getUser)
 	}
+	return e
+}
 
-	if err := e.Run(); err != nil {
-		log.Fatal(err)
-	}
+func setupMongoDBConnection() {
+	conn = db.NewMongoConnection()
 }

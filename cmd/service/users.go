@@ -41,14 +41,10 @@ func putUser(c *gin.Context) {
 
 func getUser(c *gin.Context) {
 	username := c.Param("username")
-	if username == "" {
-		c.JSON(http.StatusNotFound, newErrorResp(fmt.Errorf("no username provided")))
-		return
-	}
 
 	user, err := conn.GetUser(username)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, newErrorResp(err))
+		c.JSON(http.StatusNotFound, newErrorResp(err))
 		return
 	}
 
